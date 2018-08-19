@@ -12,6 +12,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "shader.h"
+
+
 void processInput(GLFWwindow* win);
 void render();
 void framebuffer_size_callback(GLFWwindow* win, int width, int height);
