@@ -34,6 +34,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
         "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\n";
 
+
 int main(int argc, const char * argv[]) {
     
     glfwInit();
@@ -62,6 +63,9 @@ int main(int argc, const char * argv[]) {
     //设置尺寸修改回调
     glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
     
+    Shader myShader;
+    
+
     //顶点shader
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
