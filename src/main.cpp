@@ -13,7 +13,7 @@
 #include <GLFW/glfw3.h>
 
 #include "shader.h"
-
+#include "resource_manager.h"
 
 void processInput(GLFWwindow* win);
 void render();
@@ -63,44 +63,7 @@ int main(int argc, const char * argv[]) {
     //设置尺寸修改回调
     glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
     
-    Shader myShader;
-    
-
-    //顶点shader
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    //帧shader
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success){
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    //着色器
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::LINK::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    Shader myShader = ResourceManager::LoadShader("glsl/vertex.shader", "glsl/fragment.shader", nullptr, "simple");
     
     float vertices[] = {
         0.5f, 0.5f, 0.0f,   // 右上角
@@ -139,7 +102,7 @@ int main(int argc, const char * argv[]) {
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(shaderProgram);
+        myShader.Use();
         glBindVertexArray(VAO);
 //        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 //        glDrawArrays(GL_TRIANGLES, 0, 3);
