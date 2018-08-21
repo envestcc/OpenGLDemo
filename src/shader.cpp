@@ -36,10 +36,10 @@ void Shader::Compile(const GLchar *vertexSource, const GLchar *frameSource, cons
     }
     // shader program
     this->ID = glCreateProgram();
-    glAttachShader(GL_VERTEX_SHADER, sVertex);
-    glAttachShader(GL_FRAGMENT_SHADER, sFragment);
+    glAttachShader(this->ID, sVertex);
+    glAttachShader(this->ID, sFragment);
     if (geometrySource != nullptr)
-        glAttachShader(GL_GEOMETRY_SHADER, gShader);
+        glAttachShader(this->ID, gShader);
     glLinkProgram(this->ID);
     checkCompileErrors(this->ID, "PROGRAM");
     // delete shader
