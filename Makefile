@@ -3,7 +3,7 @@ glad_linux = /search/odin/develop/opengl/libs/glad/src/glad.c
 BUILD_PATH = build
 exe = $(BUILD_PATH)/a.out
 INCLUDE = -I include -I /Users/chen/opengl/libs/ -I /search/odin/develop/opengl/libs/glad/include -I /search/odin/develop/opengl/libs/glm
-OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o $(BUILD_PATH)/obj/game.o 
+OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o $(BUILD_PATH)/obj/game.o $(BUILD_PATH)/obj/texture.o $(BUILD_PATH)/obj/stb_image_use.o
 
 run: $(exe)
 	build/a.out
@@ -26,6 +26,12 @@ $(BUILD_PATH)/obj/resource_manager.o: src/resource_manager.cpp include/resource_
 
 $(BUILD_PATH)/obj/game.o: src/game.cpp include/game.h
 	clang++ -c -std=c++11 src/game.cpp -o $(BUILD_PATH)/obj/game.o $(INCLUDE)
+
+$(BUILD_PATH)/obj/texture.o: src/texture.cpp include/texture.h
+	clang++ -c -std=c++11 src/texture.cpp -o $(BUILD_PATH)/obj/texture.o $(INCLUDE)
+
+$(BUILD_PATH)/obj/stb_image_use.o: src/stb_image_use.cpp
+	clang++ -c -std=c++11 src/stb_image_use.cpp -o $(BUILD_PATH)/obj/stb_image_use.o $(INCLUDE)
 
 clean:
 	rm -rf build/obj/*

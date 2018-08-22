@@ -16,11 +16,8 @@
 #include "resource_manager.h"
 #include "game.h"
 
-void processInput(GLFWwindow* win);
-void render();
+
 void framebuffer_size_callback(GLFWwindow* win, int width, int height);
-
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 const GLuint SCREEN_WIDTH = 800;
