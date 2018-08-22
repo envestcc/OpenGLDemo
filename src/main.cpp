@@ -14,11 +14,19 @@
 
 #include "shader.h"
 #include "resource_manager.h"
+#include "game.h"
 
 void processInput(GLFWwindow* win);
 void render();
 void framebuffer_size_callback(GLFWwindow* win, int width, int height);
 
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+
+const GLuint SCREEN_WIDTH = 800;
+const GLuint SCREEN_HEIGHT = 600;
+
+Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main(int argc, const char * argv[]) {
     
@@ -31,97 +39,81 @@ int main(int argc, const char * argv[]) {
 #endif
     
     //创建窗口
-    GLFWwindow* win = glfwCreateWindow(800, 600, "OpenglDemo", NULL, NULL);
+    GLFWwindow* win = glfwCreateWindow(800, 600, "OpenglDemo", nullptr, nullptr);
     if (nullptr == win) {
         std::cout << "failed create window.";
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(win);
-
-    
-    
+    glfwMakeContextCurrent(win);    
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD." << std::endl;
         return -1;
     }
-    //设置尺寸修改回调
+    //设置回调
     glfwSetFramebufferSizeCallback(win, framebuffer_size_callback);
-    
-    Shader myShader = ResourceManager::LoadShader("glsl/vertex.shader", "glsl/fragment.shader", nullptr, "simple");
-    
-    float vertices[] = {
-        0.5f, 0.5f, 0.0f,   // 右上角
-        0.5f, -0.5f, 0.0f,  // 右下角
-        -0.5f, -0.5f, 0.0f, // 左下角
-        -0.5f, 0.5f, 0.0f   // 左上角
-    };
-    unsigned int indices[] = { // 注意索引从0开始!
-        0, 1, 3, // 第一个三角形
-        1, 2, 3  // 第二个三角形
-    };
-    unsigned int VAO, VBO, EBO;
-    glGenVertexArrays(1, &VAO);
-    //生成缓冲对象
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
-    //绑定新创建的缓冲到gl_array_buffer
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    //把数据传到缓冲
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-    glBindVertexArray(0);
-    
-    
+    glfwSetKeyCallback(win, key_callback);
+
+    // OpenGL configuration
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Initialize game
+    game.Init();
+
+    // DeltaTime variables
+    GLfloat deltaTime = 0.0f;
+    GLfloat lastFrame = 0.0f;
+
+    // game state
+    game.State = GAME_ACTIVE;
     
     while (!glfwWindowShouldClose(win)) {
-        processInput(win);
+        // Calculate delta time
+        GLfloat currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        //检查并调用事件
+        glfwPollEvents();
+
+        // Manage user input
+        game.ProcessInput(deltaTime);
         
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // Update game state
+        game.Update(deltaTime);
+
+        // Render
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        myShader.Use();
-        glBindVertexArray(VAO);
-//        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        game.Render();
         
         //交换缓冲
         glfwSwapBuffers(win);
-        //检查并调用事件
-        glfwPollEvents();
     }
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    
     glfwTerminate();
 
     return 0;
 }
 
-//处理输入
-void processInput(GLFWwindow* win){
-    if (glfwGetKey(win, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(win, true);
-    }
-}
-
-//渲染
-void render(){
-
-    
-    
-   
-}
-
 //窗口尺寸改变
 void framebuffer_size_callback(GLFWwindow* win, int width, int height){
     glViewport(0,0,width, height);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+    // When a user process the escape key, we set the WindowShouldClose property to true, closing the app.
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            game.Keys[key] = GL_TRUE;
+        else if (action == GLFW_RELEASE)
+            game.Keys[key] = GL_FALSE;
+    }
 }
 

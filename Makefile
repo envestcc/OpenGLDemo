@@ -3,7 +3,7 @@ glad_linux = /search/odin/develop/opengl/libs/glad/src/glad.c
 BUILD_PATH = build
 exe = $(BUILD_PATH)/a.out
 INCLUDE = -I include -I /Users/chen/opengl/libs/ -I /search/odin/develop/opengl/libs/glad/include -I /search/odin/develop/opengl/libs/glm
-OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o 
+OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o $(BUILD_PATH)/obj/game.o 
 
 run: $(exe)
 	build/a.out
@@ -23,6 +23,9 @@ $(BUILD_PATH)/obj/shader.o: src/shader.cpp include/shader.h
 
 $(BUILD_PATH)/obj/resource_manager.o: src/resource_manager.cpp include/resource_manager.h
 	clang++ -c -std=c++11 src/resource_manager.cpp -o $(BUILD_PATH)/obj/resource_manager.o $(INCLUDE) 
+
+$(BUILD_PATH)/obj/game.o: src/game.cpp include/game.h
+	clang++ -c -std=c++11 src/game.cpp -o $(BUILD_PATH)/obj/game.o $(INCLUDE)
 
 clean:
 	rm -rf build/obj/*
