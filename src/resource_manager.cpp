@@ -7,18 +7,18 @@
 std::map<std::string, Shader> ResourceManager::Shaders;
 std::map<std::string, Texture2D> ResourceManager::Textures;
 
-Shader ResourceManager::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile, std::string name)
+Shader& ResourceManager::LoadShader(const GLchar* vShaderFile, const GLchar* fShaderFile, const GLchar* gShaderFile, std::string name)
 {
     Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
     return Shaders[name];
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader& ResourceManager::GetShader(std::string name)
 {
     return Shaders[name];
 }
 
-Shader ResourceManager::LoadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile)
+Shader& ResourceManager::LoadShaderFromFile(const GLchar *vShaderFile, const GLchar *fShaderFile, const GLchar *gShaderFile)
 {
     std::ifstream inFile;
     std::stringstream vShaderStream, fShaderStream, gShaderStream;
@@ -44,18 +44,18 @@ Shader ResourceManager::LoadShaderFromFile(const GLchar *vShaderFile, const GLch
     return shader;
 }
 
-Texture2D ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
+Texture2D& ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std::string name)
 {
     Textures[name] = LoadTextureFromFile(file, alpha);
     return Textures[name];
 }
 
-Texture2D ResourceManager::GetTexture(std::string name)
+Texture2D& ResourceManager::GetTexture(std::string name)
 {
     return Textures[name];
 }
 
-Texture2D ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alpha)
+Texture2D& ResourceManager::LoadTextureFromFile(const GLchar* file, GLboolean alpha)
 {
     // Create Texture object
     Texture2D texture;

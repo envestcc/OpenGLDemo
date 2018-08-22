@@ -3,7 +3,7 @@ glad_linux = /search/odin/develop/opengl/libs/glad/src/glad.c
 BUILD_PATH = build
 exe = $(BUILD_PATH)/a.out
 INCLUDE = -I include -I /Users/chen/opengl/libs/ -I /search/odin/develop/opengl/libs/glad/include -I /search/odin/develop/opengl/libs/glm
-OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o $(BUILD_PATH)/obj/game.o $(BUILD_PATH)/obj/texture.o $(BUILD_PATH)/obj/stb_image_use.o
+OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o $(BUILD_PATH)/obj/game.o $(BUILD_PATH)/obj/texture.o $(BUILD_PATH)/obj/stb_image_use.o $(BUILD_PATH)/obj/sprite_render.o
 
 run: $(exe)
 	build/a.out
@@ -32,6 +32,9 @@ $(BUILD_PATH)/obj/texture.o: src/texture.cpp include/texture.h
 
 $(BUILD_PATH)/obj/stb_image_use.o: src/stb_image_use.cpp
 	clang++ -c -std=c++11 src/stb_image_use.cpp -o $(BUILD_PATH)/obj/stb_image_use.o $(INCLUDE)
+
+$(BUILD_PATH)/obj/sprite_render.o: src/sprite_render.cpp include/sprite_render.h
+	clang++ -c -std=c++11 src/sprite_render.cpp -o $(BUILD_PATH)/obj/sprite_render.o $(INCLUDE)
 
 clean:
 	rm -rf build/obj/*

@@ -11,6 +11,7 @@ Author: cc
 
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
+#include "sprite_render.h"
 
 enum GameState {
     GAME_ACTIVE
@@ -23,6 +24,7 @@ public:
     GameState State;
     GLboolean Keys[1024];
     GLuint Width, Height;
+    SpriteRender *render;
     // Constructor/Destructor
     Game(GLuint width, GLuint height);
     ~Game();
