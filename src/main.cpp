@@ -18,12 +18,13 @@
 
 
 void framebuffer_size_callback(GLFWwindow* win, int width, int height);
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 const GLuint SCREEN_WIDTH = 800;
 const GLuint SCREEN_HEIGHT = 600;
 
-Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
+Game *game = new Game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 int main(int argc, const char * argv[]) {
     
@@ -58,14 +59,14 @@ int main(int argc, const char * argv[]) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Initialize game
-    game.Init();
+    game->Init();
 
     // DeltaTime variables
     GLfloat deltaTime = 0.0f;
     GLfloat lastFrame = 0.0f;
 
     // game state
-    game.State = GAME_ACTIVE;
+    game->State = GAME_ACTIVE;
     
     while (!glfwWindowShouldClose(win)) {
         // Calculate delta time
@@ -76,20 +77,22 @@ int main(int argc, const char * argv[]) {
         glfwPollEvents();
 
         // Manage user input
-        game.ProcessInput(deltaTime);
+        game->ProcessInput(deltaTime);
         
         // Update game state
-        game.Update(deltaTime);
+        game->Update(deltaTime);
 
         // Render
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        game.Render();
+        game->Render();
         
         //交换缓冲
         glfwSwapBuffers(win);
     }
     
+    delete game;
+
     glfwTerminate();
 
     return 0;
@@ -104,13 +107,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     // When a user process the escape key, we set the WindowShouldClose property to true, closing the app.
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
         glfwSetWindowShouldClose(window, GL_TRUE);
+    }
     if (key >= 0 && key < 1024)
     {
         if (action == GLFW_PRESS)
-            game.Keys[key] = GL_TRUE;
+            game->Keys[key] = GL_TRUE;
         else if (action == GLFW_RELEASE)
-            game.Keys[key] = GL_FALSE;
+            game->Keys[key] = GL_FALSE;
     }
 }
 

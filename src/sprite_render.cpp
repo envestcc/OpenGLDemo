@@ -9,7 +9,7 @@ SpriteRender::SpriteRender(Shader &shader)
 
 SpriteRender::~SpriteRender()
 {
-    glDeleteVertexArrays(1, &this->quadVAO);
+    glDeleteVertexArrays(1, &(this->quadVAO));
 }
 
 void SpriteRender::DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size, GLfloat rotate, glm::vec3 color)

@@ -23,7 +23,7 @@ void Game::Init()
     ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     // Load textures
-    ResourceManager::LoadTexture("textures/sasuke.jpg", GL_TRUE, "face");
+    ResourceManager::LoadTexture("textures/container.jpg", GL_FALSE, "face");
 
     render = new SpriteRender(ResourceManager::GetShader("sprite"));
 
@@ -41,5 +41,7 @@ void Game::Update(GLfloat dt)
 
 void Game::Render()
 {
-    render->DrawSprite(ResourceManager::GetTexture("face"), glm::vec2(200, 200), glm::vec2(300, 400), 45.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    static float rotate = 0.0f;
+    rotate += 0.1f;
+    render->DrawSprite(ResourceManager::GetTexture("face"), glm::vec2(200, 200), glm::vec2(480, 340), rotate, glm::vec3(1.0f, 1.0f, 1.0f));
 }
