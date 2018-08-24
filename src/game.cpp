@@ -23,7 +23,7 @@ void Game::Init()
     ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     // Load textures
-    ResourceManager::LoadTexture("textures/container.jpg", GL_FALSE, "face");
+    ResourceManager::LoadTexture("textures/sasuke.jpg", GL_FALSE, "face");
 
     render = new SpriteRender(ResourceManager::GetShader("sprite"));
 
