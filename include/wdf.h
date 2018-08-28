@@ -12,7 +12,7 @@ Author: cc
 
 #include<string>
 #include<vector>
-
+#include<map>
 
 
 class Was 
@@ -86,6 +86,7 @@ private:
     std::string filename;
     Header header;
     std::vector<Index*> wasHeaderIndexs;
+    std::map<uint32_t, int> uid2IndexMap;
 
 };
 

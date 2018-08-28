@@ -1,6 +1,7 @@
 #include"game.h"
 #include"sprite_render.h"
 #include"resource_manager.h"
+#include"wdf.h"
 #include<glm/gtc/matrix_transform.hpp>
 #include<glad/glad.h>
 
@@ -24,8 +25,10 @@ void Game::Init()
     ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
     // Load textures
     ResourceManager::LoadTexture("textures/sasuke.jpg", GL_FALSE, "face");
-
     render = new SpriteRender(ResourceManager::GetShader("sprite"));
+
+    // Load WDF
+    Wdf wdf("textures/goods.wdf");
 
 }
 
