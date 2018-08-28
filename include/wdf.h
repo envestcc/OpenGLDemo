@@ -78,15 +78,25 @@ public:
         uint32_t space;
     };
 
+    struct WasIndex
+    {
+        // was index
+        int id;
+        // was pointer
+        Was *was;
+
+        WasIndex():id(-1),was(nullptr){}
+    };
+
     Wdf(std::string filename);
     ~Wdf();
-    Was LoadWas(uint32_t uuid);
+    Was* LoadWas(uint32_t uuid);
 
 private:
     std::string filename;
     Header header;
     std::vector<Index*> wasHeaderIndexs;
-    std::map<uint32_t, int> uid2IndexMap;
+    std::map<uint32_t, WasIndex*> uid2IndexMap;
 
 };
 

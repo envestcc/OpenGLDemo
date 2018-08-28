@@ -29,6 +29,9 @@ void Game::Init()
 
     // Load WDF
     Wdf wdf("textures/goods.wdf");
+    wdf.LoadWas(0x6e3b391);
+    wdf.LoadWas(0x7021d4b);
+    wdf.LoadWas(0x9a85d10);
 
 }
 
