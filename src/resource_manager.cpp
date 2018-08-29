@@ -50,6 +50,16 @@ Texture2D& ResourceManager::LoadTexture(const GLchar* file, GLboolean alpha, std
     return Textures[name];
 }
 
+Texture2D& ResourceManager::LoadTexture(int width, int height, unsigned char* data, std::string name)
+{
+    Texture2D texture;
+    texture.Internal_Format = GL_RGBA;
+    texture.Image_Format = GL_RGBA;
+    texture.Generate(width, height, data);
+    Textures[name] = texture;
+    return Textures[name];
+}
+
 Texture2D& ResourceManager::GetTexture(std::string name)
 {
     return Textures[name];

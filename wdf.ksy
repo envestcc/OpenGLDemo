@@ -14,7 +14,6 @@ instances:
     repeat: expr
     repeat-expr: header.number
     
-    
 types:
   wdatafile_header:
     seq:
@@ -63,11 +62,17 @@ types:
       - id: palette
         size: 512
       - id: img_index
-        size: img_dir_cnt * img_frame_cnt * 4
-      - id: imgs
-        type: image
+        type: image_index
         repeat: expr
         repeat-expr: img_dir_cnt * img_frame_cnt
+  image_index:
+    seq:
+      - id: offset
+        type: u4
+    instances:
+      imgs:
+        pos: offset
+        type: image
   image:
     seq:
       - id: kp_x

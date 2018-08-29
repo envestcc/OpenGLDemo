@@ -46,8 +46,12 @@ public:
     };
 
     Header header;
-    uint16_t palette[512];
+    uint16_t palette16[256];
+    uint32_t palette[256];
     std::vector<uint32_t> frameIndexs;
+    std::vector<FrameHeader> frameHeaders;
+    std::vector<std::vector<uint32_t>> frameLines;
+    std::vector<std::vector<uint32_t>> frames;
 
 };
 
@@ -92,7 +96,6 @@ public:
     ~Wdf();
     Was* LoadWas(uint32_t uuid);
 
-private:
     std::string filename;
     Header header;
     std::vector<Index*> wasHeaderIndexs;

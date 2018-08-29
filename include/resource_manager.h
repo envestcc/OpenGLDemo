@@ -27,6 +27,8 @@ public:
 
     static Texture2D& LoadTexture(const GLchar* file, GLboolean alpha, std::string name);
 
+    static Texture2D& LoadTexture(int width, int height, unsigned char* data, std::string name);
+
     static Texture2D& GetTexture(std::string name);
 
     static void Clear();
