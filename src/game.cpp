@@ -4,6 +4,7 @@
 #include"wdf.h"
 #include<glm/gtc/matrix_transform.hpp>
 #include<glad/glad.h>
+#include<iostream>
 
 Game::Game(GLuint width, GLuint height):
     Width(width), Height(height), State(GAME_ACTIVE),
@@ -13,7 +14,12 @@ Game::Game(GLuint width, GLuint height):
 
 Game::~Game()
 {
-    delete render;
+    if (render != nullptr)
+        delete render;
+    if (wdf != nullptr)
+        delete wdf;
+    // if (was != nullptr)
+    //     delete was;
 }
 
 void Game::Init()
@@ -42,11 +48,10 @@ void Game::ProcessInput(GLfloat dt)
     if (Keys[GLFW_KEY_N] == GL_TRUE)
     {
         tt = 0;
-        if (was != nullptr)
-            delete was;
         static int id = 0;
         id = (id+1) % wdf->wasHeaderIndexs.size();
-        uint32_t uuid = wdf->wasHeaderIndexs[id]->uid;
+        uint32_t uuid = wdf->wasHeaderIndexs[id].uid;
+        std::cout << id << " " << uuid << std::endl;
         was = wdf->LoadWas(uuid);
         ResourceManager::LoadTexture(was->header.imgWidth, was->header.imgHeight, (unsigned char*)was->frames[0].data(), "test");
     }

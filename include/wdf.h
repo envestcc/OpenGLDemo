@@ -53,6 +53,7 @@ public:
     std::vector<std::vector<uint32_t>> frameLines;
     std::vector<std::vector<uint32_t>> frames;
 
+    ~Was();
 };
 
 class Wdf
@@ -90,6 +91,7 @@ public:
         Was *was;
 
         WasIndex():id(-1),was(nullptr){}
+        ~WasIndex(){if(was!=nullptr)delete was;}
     };
 
     Wdf(std::string filename);
@@ -98,8 +100,8 @@ public:
 
     std::string filename;
     Header header;
-    std::vector<Index*> wasHeaderIndexs;
-    std::map<uint32_t, WasIndex*> uid2IndexMap;
+    std::vector<Index> wasHeaderIndexs;
+    std::map<uint32_t, WasIndex> uid2IndexMap;
 
 };
 

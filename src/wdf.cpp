@@ -201,16 +201,26 @@ Wdf::Wdf(std::string filename):
     wasHeaderIndexs.resize(header.number);
     for(int i=0;i<header.number;i++)
     {
-        wasHeaderIndexs[i] = new Index();
-        in.read((char*)wasHeaderIndexs[i], sizeof(Index));
-        uid2IndexMap[wasHeaderIndexs[i]->uid] = new WasIndex();
-        uid2IndexMap[wasHeaderIndexs[i]->uid]->id = i;
+        wasHeaderIndexs[i] = *new Index();
+        in.read((char*)&wasHeaderIndexs[i], sizeof(Index));
+        uid2IndexMap[wasHeaderIndexs[i].uid] = *(new WasIndex());
+        uid2IndexMap[wasHeaderIndexs[i].uid].id = i;
     }
     in.close();
 }
 
 Wdf::~Wdf()
 {
+    // for(int i=0;i<wasHeaderIndexs.size();i++)
+    //     delete &(wasHeaderIndexs[i]);
+    wasHeaderIndexs.clear();
+    // std::map<uint32_t, WasIndex>::iterator iter;
+    // for(iter = uid2IndexMap.begin();iter != uid2IndexMap.end(); iter++)
+    // {
+    //     delete &(iter->second);
+    // }
+    uid2IndexMap.clear();
+        
 }
 
 Was* Wdf::LoadWas(uint32_t uuid)
@@ -221,7 +231,7 @@ Was* Wdf::LoadWas(uint32_t uuid)
         sprintf(msg, "Not find was %d in %s", uuid, filename.c_str());
         throw msg;
     }
-    WasIndex* it = uid2IndexMap[uuid];
+    WasIndex* it = &(uid2IndexMap[uuid]);
     if (it->was != nullptr)
         return it->was;
     Was *was = new Was();
@@ -229,7 +239,7 @@ Was* Wdf::LoadWas(uint32_t uuid)
     // read was header
     std::ifstream in;
     in.open(filename, std::ios::in|std::ios::binary);
-    in.seekg(wasHeaderIndexs[it->id]->offset);
+    in.seekg(wasHeaderIndexs[it->id].offset);
     in.read((char*)&(was->header), sizeof(Was::Header));
     if (was->header.magic != 0x5053)
     {
@@ -238,7 +248,7 @@ Was* Wdf::LoadWas(uint32_t uuid)
         throw msg;
     }
     // read palette
-    uint32_t paletteStart = wasHeaderIndexs[it->id]->offset + was->header.size + 4;
+    uint32_t paletteStart = wasHeaderIndexs[it->id].offset + was->header.size + 4;
     in.seekg(paletteStart);
     memset(was->palette16, 0, sizeof(was->palette16));
     in.read((char*)(was->palette16), sizeof(was->palette16));
@@ -307,4 +317,18 @@ Was* Wdf::LoadWas(uint32_t uuid)
     delete lineData;
     in.close();
     return was;
+}
+
+Was::~Was()
+{
+    frameIndexs.clear();
+    // for(int i=0;i<frameHeaders.size();i++)
+    //     delete &frameHeaders[i];
+    frameHeaders.clear();
+    // for(int i=0;i<frameLines.size();i++)
+    //     frameLines[i].clear();
+    frameLines.clear();
+    // for(int i=0;i<frames.size();i++)
+    //     frames[i].clear();
+    frames.clear();
 }
