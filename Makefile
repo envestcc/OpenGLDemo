@@ -47,3 +47,7 @@ $(BUILD_PATH)/obj/wdf.o: src/wdf.cpp include/wdf.h
 clean:
 	rm -rf build/obj/*
 	rm $(exe)
+
+cleanwin:
+	del build\\obj
+	del build\\a.out

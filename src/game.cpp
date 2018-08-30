@@ -25,7 +25,7 @@ Game::~Game()
 void Game::Init()
 {
     // Load WDF
-    wdf = new Wdf("textures/goods.wdf");
+    wdf = new Wdf("textures/wzife.wd1");
 
     // Load Shaders
     ResourceManager::LoadShader("glsl/vsSprite.shader", "glsl/fsSprite.shader", nullptr, "sprite");
@@ -53,13 +53,25 @@ void Game::ProcessInput(GLfloat dt)
         uint32_t uuid = wdf->wasHeaderIndexs[id].uid;
         std::cout << id << " " << uuid << std::endl;
         was = wdf->LoadWas(uuid);
-        ResourceManager::LoadTexture(was->header.imgWidth, was->header.imgHeight, (unsigned char*)was->frames[0].data(), "test");
+        if (was == nullptr)
+            return;
+        frameIndex = 0;
+        char name[32] = "";
+        sprintf(name, "test");
+        ResourceManager::LoadTexture(was->frameHeaders[frameIndex].width, was->frameHeaders[frameIndex].height, (unsigned char*)was->frames[frameIndex].data(), name);
+    }else if (Keys[GLFW_KEY_M] == GL_TRUE && was)
+    {
+        tt = 0;
+        frameIndex = (frameIndex+1) % (was->header.imgDirCnt*was->header.imgFrameCnt);
+        std::cout << frameIndex << std::endl;
+        char name[32] = "";
+        sprintf(name, "test");
+        ResourceManager::LoadTexture(was->frameHeaders[frameIndex].width, was->frameHeaders[frameIndex].height, (unsigned char*)was->frames[frameIndex].data(), name);
     }
 }
 
 void Game::Update(GLfloat dt)
 {
-
 }
 
 void Game::Render()
@@ -67,5 +79,10 @@ void Game::Render()
     static float rotate = 0.0f;
     // rotate += 0.1f;
     if (was)
-        render->DrawSprite(ResourceManager::GetTexture("test"), glm::vec2(200, 200), glm::vec2(was->header.imgWidth, was->header.imgHeight), rotate, glm::vec3(1.0f, 1.0f, 1.0f));
+    {
+        char name[32] = "";
+        sprintf(name, "test", frameIndex);
+        render->DrawSprite(ResourceManager::GetTexture(name), glm::vec2(200, 200), glm::vec2(was->frameHeaders[frameIndex].width, was->frameHeaders[frameIndex].height), rotate, glm::vec3(1.0f, 1.0f, 1.0f));
+    }
+        
 }

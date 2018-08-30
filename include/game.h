@@ -28,6 +28,7 @@ public:
     SpriteRender *render;
     Wdf *wdf;
     Was *was;
+    int frameIndex;
     // Constructor/Destructor
     Game(GLuint width, GLuint height);
     ~Game();

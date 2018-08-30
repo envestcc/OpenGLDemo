@@ -235,7 +235,6 @@ Was* Wdf::LoadWas(uint32_t uuid)
     if (it->was != nullptr)
         return it->was;
     Was *was = new Was();
-    it->was = was;
     // read was header
     std::ifstream in;
     in.open(filename, std::ios::in|std::ios::binary);
@@ -244,8 +243,11 @@ Was* Wdf::LoadWas(uint32_t uuid)
     if (was->header.magic != 0x5053)
     {
         char msg[256];
-        sprintf(msg, "was file header magic error:%d, uuid=%d, wdf=%s",was->header.magic, uuid, filename.c_str());
-        throw msg;
+        char *magic = (char*)&(was->header.magic);
+        sprintf(msg, "was file header magic error:%c%c%c%c, uuid=%d, wdf=%s", *magic, *(magic+1), *(magic+2), *(magic+3), uuid, filename.c_str());
+        std::cerr << msg << std::endl;
+        // throw msg;
+        return nullptr;
     }
     // read palette
     uint32_t paletteStart = wasHeaderIndexs[it->id].offset + was->header.size + 4;
@@ -258,6 +260,13 @@ Was* Wdf::LoadWas(uint32_t uuid)
     }
     // read frameindex
     int framecnt = was->header.imgDirCnt * was->header.imgFrameCnt;
+    if (framecnt<0 || framecnt>1000)
+    {
+        char msg[256];
+        sprintf(msg, "was file frame size error:%d, uuid=%d, wdf=%s",framecnt, uuid, filename.c_str());
+        std::cerr << msg << std::endl;
+        return nullptr;
+    }
     was->frameIndexs.resize(framecnt);
     in.read((char*)was->frameIndexs.data(), framecnt*4);
     // read frameheader
@@ -267,6 +276,14 @@ Was* Wdf::LoadWas(uint32_t uuid)
     {
         in.seekg(paletteStart + was->frameIndexs[i]);
         in.read((char*)(&was->frameHeaders[i]), sizeof(Was::FrameHeader));
+        int width = was->frameHeaders[i].width, height=was->frameHeaders[i].height;
+        if (height >= (1<<15) || width >= (1<<15) || height<=0 || width<=0)
+        {
+            char msg[256];
+            sprintf(msg, "was file image size error:frame=%d, width=%d, height=%d, uuid=%d, wdf=%s", i, width, height, uuid, filename.c_str());
+            std::cerr << msg << std::endl;
+            return nullptr;
+        }
         was->frameLines[i].resize(was->frameHeaders[i].height);
         in.read((char*)(was->frameLines[i].data()), sizeof(uint32_t)*(was->frameHeaders[i].height));
     }
@@ -316,6 +333,7 @@ Was* Wdf::LoadWas(uint32_t uuid)
     }
     delete lineData;
     in.close();
+    it->was = was;
     return was;
 }
 
