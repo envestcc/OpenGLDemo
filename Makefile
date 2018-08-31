@@ -3,10 +3,10 @@ glad_linux = /search/odin/develop/opengl/libs/glad/src/glad.c
 glad_win = d:/develop/opengl/libs/glad/src/glad.c
 BUILD_PATH = build
 exe = $(BUILD_PATH)/a.out
-INCLUDE = -I include -I /Users/chen/opengl/libs/ -I /search/odin/develop/opengl/libs/glad/include -I /search/odin/develop/opengl/libs/glm -I D:/develop/opengl/libs/glad/include -I D:/develop/opengl/libs/glfw -I D:/develop/opengl/libs/glm
+INCLUDE = -I include -I /Users/chen/opengl/libs/ -I /search/odin/develop/opengl/libs/glad/include -I /search/odin/develop/opengl/libs/glm -I D:/develop/opengl/libs/glad/include -I D:/develop/opengl/libs/glfw -I D:/develop/opengl/libs/glm -I D:/develop/opengl/libs/freetype
 OBJS = $(BUILD_PATH)/obj/main.o $(BUILD_PATH)/obj/shader.o $(BUILD_PATH)/obj/resource_manager.o $(BUILD_PATH)/obj/game.o $(BUILD_PATH)/obj/texture.o $(BUILD_PATH)/obj/stb_image_use.o $(BUILD_PATH)/obj/sprite_render.o $(BUILD_PATH)/obj/wdf.o
 CC = g++
-LIBS = -L"D:/develop/opengl/libs/glfw"
+LIBS = -L"D:/develop/opengl/libs/glfw" -L"D:/develop/opengl/libs/freetype"
 
 run: $(exe)
 	build/a.out
@@ -18,7 +18,7 @@ osx: $(OBJS) $(glad)
 	$(CC) $(OBJS) $(glad) -g -lglfw -framework OpenGL -o $(exe) $(INCLUDE)
 
 win: $(OBJS) $(glad_win)
-	$(CC) $(OBJS) $(glad_win) -g -v $(LIBS) -lglfw3 -lOpenGL32 -std=c++11 -o $(exe) $(INCLUDE)
+	$(CC) $(OBJS) $(glad_win) -g -v $(LIBS) -lglfw3 -lOpenGL32 -lfreetype -std=c++11 -o $(exe) $(INCLUDE)
 
 $(BUILD_PATH)/obj/main.o: src/main.cpp
 	$(CC) -c -g -std=c++11 src/main.cpp -o $(BUILD_PATH)/obj/main.o $(INCLUDE)

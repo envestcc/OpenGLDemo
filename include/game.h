@@ -19,6 +19,13 @@ enum GameState {
 };
 
 
+struct Character {
+    GLuint TextureID;
+    glm::ivec2 Size;
+    glm::ivec2 Bearing;
+    GLuint Advance;
+};
+
 class Game
 {
 public:
@@ -29,6 +36,7 @@ public:
     Wdf *wdf;
     Was *was;
     int frameIndex;
+    std::map<GLchar, Character> Characters;
     // Constructor/Destructor
     Game(GLuint width, GLuint height);
     ~Game();
@@ -38,7 +46,12 @@ public:
     void ProcessInput(GLfloat dt);
     void Update(GLfloat dt);
     void Render();
+
+    void RenderText(Shader &s, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+    GLuint VAO;
+    GLuint VBO;
 };
+
 
 
 #endif
