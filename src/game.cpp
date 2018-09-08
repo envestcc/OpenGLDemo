@@ -73,7 +73,7 @@ Game::~Game()
 void Game::Init()
 {
     // Load WDF
-    wdf = new Wdf("textures/goods.wdf");
+    wdf = new Wdf("textures/shape.wda");
 
     // Load Shaders
     ResourceManager::LoadShader("glsl/vsSprite.shader", "glsl/fsSprite.shader", nullptr, "sprite");
@@ -124,7 +124,7 @@ void Game::Init()
             texture,
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-            face->glyph->advance.x
+            (GLuint)face->glyph->advance.x
         };
         Characters.insert(std::pair<GLchar, Character>(c, character));
     }
@@ -192,7 +192,9 @@ void Game::Render()
     {
         char name[32] = "";
         sprintf(name, "test", frameIndex);
-        render->DrawSprite(ResourceManager::GetTexture(name), glm::vec2(200, 200), glm::vec2(was->frameHeaders[frameIndex].width, was->frameHeaders[frameIndex].height), rotate, glm::vec3(1.0f, 1.0f, 1.0f));
+        int width = 400;
+        int height = was->frameHeaders[frameIndex].height/(float)(was->frameHeaders[frameIndex].width) * width;
+        render->DrawSprite(ResourceManager::GetTexture(name), glm::vec2(0, 0), glm::vec2(width, height), rotate, glm::vec3(1.0f, 1.0f, 1.0f));
     }
 
     RenderText(ResourceManager::GetShader("font"), "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8, 0.2));
