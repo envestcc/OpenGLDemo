@@ -17,8 +17,8 @@ linux: $(OBJS) $(glad_linux)
 osx: $(OBJS) $(glad)
 	$(CC) $(OBJS) $(glad) -g -lglfw -framework OpenGL  -lfreetype -o $(exe) $(INCLUDE)
 
-win: $(OBJS) $(glad_win)
-	$(CC) $(OBJS) $(glad_win) -g -v $(LIBS) -lglfw3 -lOpenGL32 -lfreetype -std=c++11 -o $(exe) $(INCLUDE)
+# win: $(OBJS) $(glad_win)
+# 	$(CC) $(OBJS) $(glad_win) -g -v $(LIBS) -lglfw3 -lOpenGL32 -lfreetype -std=c++11 -o $(exe) $(INCLUDE)
 
 $(BUILD_PATH)/obj/main.o: src/main.cpp
 	$(CC) -c -g -std=c++11 src/main.cpp -o $(BUILD_PATH)/obj/main.o $(INCLUDE)
