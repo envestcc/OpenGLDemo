@@ -73,7 +73,7 @@ Game::~Game()
 void Game::Init()
 {
     // Load WDF
-    wdf = new Wdf("textures/wzife.wd1");
+    wdf = new Wdf("textures/goods.wdf");
 
     // Load Shaders
     ResourceManager::LoadShader("glsl/vsSprite.shader", "glsl/fsSprite.shader", nullptr, "sprite");

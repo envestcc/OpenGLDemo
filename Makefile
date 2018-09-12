@@ -17,32 +17,11 @@ linux: $(OBJS) $(glad_linux)
 osx: $(OBJS) $(glad)
 	$(CC) $(OBJS) $(glad) -g -lglfw -framework OpenGL  -lfreetype -o $(exe) $(INCLUDE)
 
-# win: $(OBJS) $(glad_win)
-# 	$(CC) $(OBJS) $(glad_win) -g -v $(LIBS) -lglfw3 -lOpenGL32 -lfreetype -std=c++11 -o $(exe) $(INCLUDE)
+win: $(OBJS) $(glad_win)
+	$(CC) $(OBJS) $(glad_win) -g -v $(LIBS) -lglfw3 -lOpenGL32 -lfreetype -std=c++11 -o $(exe) $(INCLUDE)
 
-$(BUILD_PATH)/obj/main.o: src/main.cpp
-	$(CC) -c -g -std=c++11 src/main.cpp -o $(BUILD_PATH)/obj/main.o $(INCLUDE)
-
-$(BUILD_PATH)/obj/shader.o: src/shader.cpp include/shader.h
-	$(CC) -c -g -std=c++11 src/shader.cpp -o $(BUILD_PATH)/obj/shader.o $(INCLUDE) 
-
-$(BUILD_PATH)/obj/resource_manager.o: src/resource_manager.cpp include/resource_manager.h
-	$(CC) -c -g -std=c++11 src/resource_manager.cpp -o $(BUILD_PATH)/obj/resource_manager.o $(INCLUDE) 
-
-$(BUILD_PATH)/obj/game.o: src/game.cpp include/game.h
-	$(CC) -c -g -std=c++11 src/game.cpp -o $(BUILD_PATH)/obj/game.o $(INCLUDE)
-
-$(BUILD_PATH)/obj/texture.o: src/texture.cpp include/texture.h
-	$(CC) -c -g -std=c++11 src/texture.cpp -o $(BUILD_PATH)/obj/texture.o $(INCLUDE)
-
-$(BUILD_PATH)/obj/stb_image_use.o: src/stb_image_use.cpp
-	$(CC) -c -g -std=c++11 src/stb_image_use.cpp -o $(BUILD_PATH)/obj/stb_image_use.o $(INCLUDE)
-
-$(BUILD_PATH)/obj/sprite_render.o: src/sprite_render.cpp include/sprite_render.h
-	$(CC) -c -g -std=c++11 src/sprite_render.cpp -o $(BUILD_PATH)/obj/sprite_render.o $(INCLUDE)
-
-$(BUILD_PATH)/obj/wdf.o: src/wdf.cpp include/wdf.h
-	$(CC) -c -g -std=c++11 src/wdf.cpp -o $(BUILD_PATH)/obj/wdf.o $(INCLUDE)
+$(BUILD_PATH)/obj/%.o: src/%.cpp
+	$(CC) -c -g -std=c++11 $< -o $@ $(INCLUDE)
 
 clean:
 	rm -rf build/obj/*
