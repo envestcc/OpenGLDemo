@@ -37,6 +37,8 @@ public:
     virtual ~Widget();
     virtual void Update(GLfloat dt);
     virtual void Render();
+    virtual void onKeyUp();
+    virtual void onMouseClick();
 
 };
 
